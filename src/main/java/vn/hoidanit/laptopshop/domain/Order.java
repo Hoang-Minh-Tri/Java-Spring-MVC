@@ -2,8 +2,6 @@ package vn.hoidanit.laptopshop.domain;
 
 import java.util.List;
 
-import org.hibernate.annotations.DialectOverride.OverridesAnnotation;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -22,20 +20,13 @@ public class Order {
 
     private double totalPrice;
 
+    // user id
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-    public List<OrderDetail> getOrderDetail() {
-        return OrderDetail;
-    }
-
-    public void setOrderDetail(List<OrderDetail> orderDetail) {
-        OrderDetail = orderDetail;
-    }
-
     @OneToMany(mappedBy = "order")
-    private List<OrderDetail> OrderDetail;
+    List<OrderDetail> orderDetails;
 
     public long getId() {
         return id;
@@ -56,14 +47,6 @@ public class Order {
     @Override
     public String toString() {
         return "Order [id=" + id + ", totalPrice=" + totalPrice + "]";
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
 }
