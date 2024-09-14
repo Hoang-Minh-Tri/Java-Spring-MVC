@@ -6,6 +6,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,16 +29,6 @@ public class UserController {
         this.userService = userService;
         this.uploadService = uploadService;
         this.passwordEncoder = passwordEncoder;
-    }
-
-    @RequestMapping("/")
-    public String getHomePage(Model model) {
-        List<User> arrUsers = this.userService.getAllUsersByEmail("1@gmail.com");
-        System.out.println(arrUsers);
-
-        model.addAttribute("eric", "test");
-        model.addAttribute("hoidanit", "from controller with model");
-        return "hello";
     }
 
     @RequestMapping("/admin/user")
@@ -64,9 +55,17 @@ public class UserController {
     @PostMapping(value = "/admin/user/create")
     public String createUserPage(Model model,
             @ModelAttribute("newUser") @Valid User hoidanit,
-            @RequestParam("hoidanitFile") MultipartFile file,
-            BindingResult bindingResult) {
+            BindingResult newUserBindingResult,
+            @RequestParam("hoidanitFile") MultipartFile file) {
 
+        List<FieldError> errors = newUserBindingResult.getFieldErrors();
+        for (FieldError error : errors) {
+            System.out.println(error.getField() + " - " + error.getDefaultMessage());
+        }
+
+        if (newUserBindingResult.hasErrors()) {
+            return "admin/user/create";
+        }
         String avatar = this.uploadService.handleSaveUploadFile(file, "avatar");
         String hashPassword = this.passwordEncoder.encode(hoidanit.getPassword());
 

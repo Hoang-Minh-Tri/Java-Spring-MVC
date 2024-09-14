@@ -15,11 +15,11 @@
                 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
                 <script>
                     $(document).ready(() => {
-                        const avatarFile = $("#avatarFile");
+                        const avatarFile = $("#productFile");
                         avatarFile.change(function (e) {
                             const imgURL = URL.createObjectURL(e.target.files[0]);
-                            $("#avatarPreview").attr("src", imgURL);
-                            $("#avatarPreview").css({ "display": "block" });
+                            $("#productPreview").attr("src", imgURL);
+                            $("#productPreview").css({ "display": "block" });
                         });
                     });
                 </script>
@@ -43,15 +43,27 @@
                                         <div class="col-md-6 col-12 mx-auto">
                                             <h3>Create a product</h3>
                                             <hr />
-                                            <form:form method="post" action="/admin/user/create" class="row"
+                                            <form:form method="post" action="/admin/product/create" class="row"
                                                 enctype="multipart/form-data" modelAttribute="newProduct">
                                                 <div class="mb-3 col-12 col-md-6">
                                                     <label class="form-label">Name:</label>
-                                                    <form:input type="text" class="form-control" path="name" />
+                                                    <c:set var="errorsName">
+                                                        <form:errors path="name" cssClass="invalid-feedback" />
+                                                    </c:set>
+                                                    <form:input type="text"
+                                                        class="form-control ${not empty errorsName ? 'is-invalid' : ''}"
+                                                        path="name" />
+                                                    ${errorsName}
                                                 </div>
                                                 <div class="mb-3 col-12 col-md-6">
                                                     <label class="form-label">Price:</label>
-                                                    <form:input type="number" class="form-control" path="price" />
+                                                    <c:set var="errorsPrice">
+                                                        <form:errors path="price" cssClass="invalid-feedback" />
+                                                    </c:set>
+                                                    <form:input type="number"
+                                                        class="form-control ${not empty errorsPrice ? 'is-invalid' : ''}"
+                                                        path="price" step="0.01" />
+                                                    ${errorsPrice}
                                                 </div>
                                                 <div class="mb-3 col-12">
                                                     <label class="form-label">Detail description:</label>
@@ -62,8 +74,14 @@
                                                     <form:input type="text" class="form-control" path="shortDesc" />
                                                 </div>
                                                 <div class="mb-3 col-12 col-md-6">
+                                                    <c:set var="errorsQuantity">
+                                                        <form:errors path="quantity" cssClass="invalid-feedback" />
+                                                    </c:set>
                                                     <label class="form-label">Quantity:</label>
-                                                    <form:input type="number" class="form-control" path="quantity" />
+                                                    <form:input type="number"
+                                                        class="form-control ${not empty errorsQuantity ? 'is-invalid' : ''}"
+                                                        path="quantity" />
+                                                    ${errorsQuantity}
                                                 </div>
 
                                                 <div class="mb-3 col-12 col-md-6">
@@ -91,12 +109,12 @@
                                                 </div>
                                                 <div class="mb-3 col-12 col-md-6">
                                                     <label for="avatarFile" class="form-label">Image:</label>
-                                                    <input class="form-control" type="file" id="avatarFile"
+                                                    <input class="form-control" type="file" id="productFile"
                                                         accept=".png, .jpg, .jpeg" name="hoidanitFile" />
                                                 </div>
                                                 <div class="col-12 mb-3">
-                                                    <img style="max-height: 250px; display: none;" alt="avatar preview"
-                                                        id="avatarPreview" />
+                                                    <img style="max-height: 250px; display: none;" alt="Product preview"
+                                                        id="productPreview" />
                                                 </div>
                                                 <div class="col-12 mb-5">
                                                     <button type="submit" class="btn btn-primary">Create</button>
