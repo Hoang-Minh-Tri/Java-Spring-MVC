@@ -1,5 +1,6 @@
 package vn.hoidanit.laptopshop.domain;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -23,8 +24,10 @@ public class Product {
     @DecimalMin(value = "0.1", message = "Vui lòng nhập giá cao hơn")
     private double price;
     private String image;
+    @Column(columnDefinition = "MEDIUMTEXT")
     private String detailDesc;
     private String shortDesc;
+    @Column(columnDefinition = "MEDIUMTEXT")
     @NotNull(message = "Vui lòng không để trống mục này")
     @Min(value = 1, message = "Số lượng không hợp lệ")
     private long quantity;

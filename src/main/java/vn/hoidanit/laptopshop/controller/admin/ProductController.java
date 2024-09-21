@@ -43,7 +43,7 @@ public class ProductController {
         model.addAttribute("product", product);
         model.addAttribute("id", id);
 
-        return "/admin/product/detail";
+        return "admin/product/detail";
     }
 
     @GetMapping("/admin/product/create")
@@ -75,7 +75,7 @@ public class ProductController {
     public String getDeleteProductPage(Model model, @PathVariable long id) {
         model.addAttribute("id", id);
         model.addAttribute("newProduct", new Product());
-        return "/admin/product/delete";
+        return "admin/product/delete";
     }
 
     @PostMapping("/admin/product/delete")
@@ -88,7 +88,7 @@ public class ProductController {
     public String getUpdateProductPage(Model model, @PathVariable long id) {
         Product newProduct = this.productService.geProductById(id);
         model.addAttribute("newProduct", newProduct);
-        return "/admin/product/update";
+        return "admin/product/update";
     }
 
     @PostMapping("/admin/product/update")
@@ -113,6 +113,11 @@ public class ProductController {
         currenProduct.setTarget(hoidanit.getTarget());
         this.productService.handleSaveProduct(currenProduct);
         return "redirect:/admin/product";
+    }
+
+    @PostMapping("/admin/product/{id}")
+    public String getProductRegister(Model model) {
+        return "";
     }
 
 }
