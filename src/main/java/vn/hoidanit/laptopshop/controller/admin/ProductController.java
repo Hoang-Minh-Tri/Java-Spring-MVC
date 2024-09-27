@@ -39,7 +39,7 @@ public class ProductController {
 
     @GetMapping("/admin/product/{id}")
     public String getProductDetailPage(Model model, @PathVariable long id) {
-        Product product = this.productService.geProductById(id);
+        Product product = this.productService.geProductById(id).get();
         model.addAttribute("product", product);
         model.addAttribute("id", id);
 
@@ -86,7 +86,7 @@ public class ProductController {
 
     @GetMapping("/admin/product/update/{id}")
     public String getUpdateProductPage(Model model, @PathVariable long id) {
-        Product newProduct = this.productService.geProductById(id);
+        Product newProduct = this.productService.geProductById(id).get();
         model.addAttribute("newProduct", newProduct);
         return "admin/product/update";
     }
@@ -100,7 +100,7 @@ public class ProductController {
             return "admin/product/update";
         }
         String avatar = this.uploadService.handleSaveUploadFile(file, "product");
-        Product currenProduct = this.productService.geProductById(hoidanit.getId());
+        Product currenProduct = this.productService.geProductById(hoidanit.getId()).get();
         if (avatar != "") {
             currenProduct.setImage(avatar);
         }
