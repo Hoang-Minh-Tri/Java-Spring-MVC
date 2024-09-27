@@ -20,7 +20,6 @@ import vn.hoidanit.laptopshop.repository.CartRepository;
 import vn.hoidanit.laptopshop.service.ProductService;
 import vn.hoidanit.laptopshop.service.UserService;
 
-
 @Controller
 public class ItemController {
 
@@ -46,12 +45,12 @@ public class ItemController {
 
     @PostMapping("/add-product-to-cart/{id}")
     public String addProductToCart(@PathVariable long id, HttpServletRequest request) {
-        // HttpSession session = request.getSession(false);
+        HttpSession session = request.getSession(false);
 
-        // long productId = id;
-        // String email = (String) session.getAttribute("email");
+        long productId = id;
+        String email = (String) session.getAttribute("email");
 
-        // this.productService.handleAddProductToCart(email, productId, session);
+        this.productService.handleAddProductToCart(email, productId, session);
         return "redirect:/";
     }
 
@@ -80,18 +79,8 @@ public class ItemController {
     @PostMapping("/delete-cart-product/{id}")
     public String postDeleteCartProduct(@PathVariable long id, HttpServletRequest request) {
         HttpSession session = request.getSession(false);
-        CartDetail cd = this.cartDetailRepository.findById(id);
-        Cart cart = cd.getCart();
-        this.productService.deleteAProductCart(id);
-        if (cart.getSum() > 1) {
-            int sum = cart.getSum() - 1;
-            cart.setSum(cart.getSum() - 1);
-            this.cartRepository.save(cart);
-            session.setAttribute("sum", sum);
-        } else {
-            this.cartRepository.delete(cart);
-            session.setAttribute("sum", 0);
-        }
+        long cartDetailId = id;
+        this.productService.handleRomeveCartDetail(cartDetailId, session);
         return "redirect:/cart";
     }
 

@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import vn.hoidanit.laptopshop.domain.Cart;
 import vn.hoidanit.laptopshop.domain.CartDetail;
@@ -88,11 +89,22 @@ public class ProductService {
         return this.productRepository.findById(id);
     }
 
-    public void deleteAProductCart(long id) {
-        this.cartDetailRepository.deleteById(id);
-    }
-
     public void deleteCart(Cart cart) {
         this.cartRepository.delete(cart);
+    }
+
+    public void handleRomeveCartDetail(long id, HttpSession session) {
+        CartDetail cd = this.cartDetailRepository.findById(id);
+        Cart cart = cd.getCart();
+        this.cartDetailRepository.deleteById(id);
+        if (cart.getSum() > 1) {
+            int sum = cart.getSum() - 1;
+            cart.setSum(cart.getSum() - 1);
+            this.cartRepository.save(cart);
+            session.setAttribute("sum", sum);
+        } else {
+            this.cartRepository.delete(cart);
+            session.setAttribute("sum", 0);
+        }
     }
 }
